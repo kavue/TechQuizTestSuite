@@ -1,51 +1,83 @@
 import React from 'react';
-import { mount } from 'cypress/react';
-import Quiz from '../../client/src/components/Quiz'; 
+import Quiz from '../../client/src/components/Quiz';
 
 describe('<Quiz />', () => {
-  it('should render the quiz start button', () => {
-    mount(<Quiz />);
-    cy.contains('Start Quiz').should('be.visible');
+  beforeEach(() => {
+    cy.intercept({
+      method: 'GET',
+      url: "/api/questions/random"
+    },
+      {
+        fixture: 'questions.json',
+        statusCode: 200
+      });
   });
 
-  it('should start the quiz and show the first question', () => {
-    mount(<Quiz />);
-    cy.contains('Start Quiz').click();
-    
-    // Check if the first question is displayed
-    cy.get('.card h2').should('not.contain', 'Start Quiz');
+  it('renders', () => {
+    // see: https://on.cypress.io/mounting-react
+    cy.mount(<Quiz />);
   });
 
-  it('should show score after quiz completion', () => {
-    mount(<Quiz />);
-    cy.contains('Start Quiz').click();
+  it('mounts and displays the "Start Quiz" button', () => {
+    // ARRANGE
+    cy.mount(<Quiz />);
+    // ACT
+    // ASSERT
+    cy.get('button').contains('Start Quiz').should('be.visible');
+  });
 
-    // Assuming there's a correct answer for the first question
+  it('should display the first question when the Start Quiz button is clicked', () => {
+    // ARRANGE
+    cy.mount(<Quiz />);
+    // ACT
+    cy.get('button').contains('Start Quiz').click();
+    // ASSERT
+    cy.get('h2').contains('Which is the correct answer?').should('be.visible');
+  });
+
+  it('should show the next question after an answer is selected', () => {
+    // ARRANGE
+    cy.mount(<Quiz />);
+    cy.get('button').contains('Start Quiz').click();
+    // ACT
     cy.get('.btn-primary').first().click();
+    // ASSERT
+    cy.get('h2').should('not.contain', 'Which is the correct answer?');
+    cy.get('h2').should('be.visible');
+  });
 
-    // After answering all questions, check if the score is displayed
+  it('should display the final score after all questions are answered', () => {
+    // ARRANGE
+    cy.mount(<Quiz />);
+    cy.get('button').contains('Start Quiz').click();
+    // ACT
+    cy.get('.btn-primary').first().click();
+    cy.get('.btn-primary').first().click();
+    // ASSERT
     cy.get('.alert-success').should('contain', 'Your score');
+  });
+
+  it('should show "Take New Quiz" button after quiz completion', () => {
+    // ARRANGE
+    cy.mount(<Quiz />);
+    cy.get('button').contains('Start Quiz').click();
+    // ACT
+    cy.get('.btn-primary').first().click();
+    cy.get('.btn-primary').first().click();
+    // ASSERT
     cy.contains('Take New Quiz').should('be.visible');
   });
 
-  it('should show loading spinner while fetching questions', () => {
-    mount(<Quiz />);
-    
-    // Start the quiz
-    cy.contains('Start Quiz').click();
-
-    // While questions are being loaded, the spinner should be visible
-    cy.get('.spinner-border').should('be.visible');
-  });
-
-  it('should handle answer clicks correctly and update the score', () => {
-    mount(<Quiz />);
-    cy.contains('Start Quiz').click();
-
-    // Assuming first answer is correct
+  it('should reset the quiz when "Take New Quiz" is clicked', () => {
+    // ARRANGE
+    cy.mount(<Quiz />);
+    cy.get('button').contains('Start Quiz').click();
+    // ACT
     cy.get('.btn-primary').first().click();
-    
-    // After answering, score should increment by 1
-    cy.get('.alert-success').should('contain', '1');
+    cy.get('.btn-primary').first().click();
+    cy.contains('Take New Quiz').click();
+    // ASSERT: Check if the first question is visible again
+    cy.get('h2').contains('Which is the correct answer?').should('be.visible');
   });
 });
+

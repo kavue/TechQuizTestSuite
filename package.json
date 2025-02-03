@@ -15,12 +15,16 @@
     "seed": "cd server && npm run seed",
     "render-build": "npm install && npm run build",
     "cypress": "npx cypress open",
-    "test": "npx cypress run --browser electron --headless"
+    "test": "npx cypress run --browser electron --headless && cypress run --component",
+    "cypresstest:component": "cypress run --component",
+    "cypresstest:e2e": "cypress run --browser electron --headless",
+    "cypressopen": "cypress open"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@cypress/react18": "^2.0.1",
     "@testing-library/cypress": "^10.0.2",
     "@testing-library/react": "^16.2.0",
     "@types/cypress": "^0.1.6",
