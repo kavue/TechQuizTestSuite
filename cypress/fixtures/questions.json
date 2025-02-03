@@ -16,15 +16,6 @@
         { "text": "5", "isCorrect": false },
         { "text": "6", "isCorrect": false }
       ]
-    },
-    {
-      "question": "Who wrote 'To Kill a Mockingbird'?",
-      "answers": [
-        { "text": "Harper Lee", "isCorrect": true },
-        { "text": "J.K. Rowling", "isCorrect": false },
-        { "text": "Ernest Hemingway", "isCorrect": false },
-        { "text": "F. Scott Fitzgerald", "isCorrect": false }
-      ]
     }
   ]
   

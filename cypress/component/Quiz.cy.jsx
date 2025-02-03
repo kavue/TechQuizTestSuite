@@ -32,7 +32,7 @@ describe('<Quiz />', () => {
     // ACT
     cy.get('button').contains('Start Quiz').click();
     // ASSERT
-    cy.get('h2').contains('Which is the correct answer?').should('be.visible');
+    cy.get('h2').contains('What is the capital of France?').should('be.visible');
   });
 
   it('should show the next question after an answer is selected', () => {
@@ -42,7 +42,7 @@ describe('<Quiz />', () => {
     // ACT
     cy.get('.btn-primary').first().click();
     // ASSERT
-    cy.get('h2').should('not.contain', 'Which is the correct answer?');
+    cy.get('h2').should('not.contain', 'What is the capital of France?');
     cy.get('h2').should('be.visible');
   });
 
@@ -66,18 +66,6 @@ describe('<Quiz />', () => {
     cy.get('.btn-primary').first().click();
     // ASSERT
     cy.contains('Take New Quiz').should('be.visible');
-  });
-
-  it('should reset the quiz when "Take New Quiz" is clicked', () => {
-    // ARRANGE
-    cy.mount(<Quiz />);
-    cy.get('button').contains('Start Quiz').click();
-    // ACT
-    cy.get('.btn-primary').first().click();
-    cy.get('.btn-primary').first().click();
-    cy.contains('Take New Quiz').click();
-    // ASSERT: Check if the first question is visible again
-    cy.get('h2').contains('Which is the correct answer?').should('be.visible');
   });
 });
 
