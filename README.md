@@ -1,5 +1,7 @@
 # Tech Quiz Test Suite
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 ## Project Overview
 This project is a Tech Quiz Test Suite built using Cypress for testing the functionality of a quiz application. The test suite ensures that users can start a quiz, answer questions, see their score, and restart the quiz.
 
